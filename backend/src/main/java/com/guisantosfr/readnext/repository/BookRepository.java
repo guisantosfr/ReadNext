@@ -16,5 +16,5 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
     @Query("SELECT b FROM Book b LEFT JOIN FETCH b.recommendedFrom")
     List<Book> findAllRecommendations();
 
-    List<Book> findByRecommendation(UUID bookId);
+    List<Book> findByRecommendedFrom(UUID bookId);
 }
