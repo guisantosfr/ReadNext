@@ -12,7 +12,7 @@ interface SearchParams {
 
 function processBooks(googleBooksResponse: { items?: GoogleBook[] }): ProcessedBook[] {
   if (!googleBooksResponse.items) return [];
-  
+
   return googleBooksResponse.items.map((book) => ({
     id: book.id,
     title: book.volumeInfo.title || 'Título não disponível',
@@ -24,7 +24,7 @@ function processBooks(googleBooksResponse: { items?: GoogleBook[] }): ProcessedB
   }));
 }
 
-export default async function HomePage({ searchParams }: { searchParams: Promise<SearchParams>}) {
+export default async function HomePage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const resolvedSearchParams = await searchParams;
   const params = new URLSearchParams();
   const { search } = resolvedSearchParams;
@@ -33,7 +33,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   let hasSearched = false;
   let error: string | null = null;
   let loading = false;
-  
+
   if (search && search.trim()) {
     params.set('search', search);
 
@@ -43,11 +43,13 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
     try {
       const encodedSearch = encodeURIComponent(search.trim());
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_GOOGLE_BOOKS_ENDPOINT}?q=${encodedSearch}&maxResults=40&printType=books`,
+        `${process.env.NEXT_PUBLIC_API_URL}/external-books/search?q=${encodedSearch}`,
         {
           next: { revalidate: 300 }, // Cache for 5 minutes
         }
       );
+
+      console.log(response)
 
       if (!response.ok) {
         throw new Error(`API Error: ${response.status}`);
@@ -92,7 +94,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         </Link>
       </div>
 
-      <SearchResult hasSearched={hasSearched} loading={loading} error={error} books={books}/>
+      <SearchResult hasSearched={hasSearched} loading={loading} error={error} books={books} />
     </div>
   )
 }

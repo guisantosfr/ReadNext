@@ -8,9 +8,9 @@ import Link from "next/link"
 export default async function LibraryBookDetailPage({ params }: { params: Promise<{ id: string }>  }) {
   const { id } = await params;
 
-  const bookData = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/books/${id}`)
+  const bookData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books/${id}`)
 
-  const book = await bookData.json()
+  const book = bookData.ok ? await bookData.json() : null
 
   if (!book) {
     return (

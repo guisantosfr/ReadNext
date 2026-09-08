@@ -4,12 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Link from "next/link"
 import { Button } from "./ui/button"
 import { Plus } from "lucide-react"
-import { toast } from "sonner"
 import { ProcessedBook } from "@/types/ProcessedBook"
 import { addBookToLibrary } from "@/lib/add-book-to-library"
 
 export default function BookCard(book: ProcessedBook) {
-   
+
     return (
         <Card key={book.id} className="hover:shadow-lg transition-shadow">
             <CardHeader className="pb-2">

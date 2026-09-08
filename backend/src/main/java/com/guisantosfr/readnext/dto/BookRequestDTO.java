@@ -9,19 +9,19 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record BookRequestDTO(
-                @NotBlank(message = "O título é obrigatório.") String title,
+        @NotBlank(message = "O título é obrigatório.") String title,
 
-                @NotBlank(message = "O autor é obrigatório.") String author,
+        @NotBlank(message = "O autor é obrigatório.") String author,
 
-                String description,
+        String description,
 
-                String cover,
+        String cover,
 
-                String genre,
+        String genre,
 
-                @Positive(message = "O número de páginas deve ser maior que zero.") Integer pages,
+        @Positive(message = "O número de páginas deve ser maior que zero.") Integer pages,
 
-                @NotNull(message = "O status é obrigatório.") BookStatus status,
+        BookStatus status,
 
-                UUID recommendedFromId) {
+        UUID recommendedFromId) {
 }

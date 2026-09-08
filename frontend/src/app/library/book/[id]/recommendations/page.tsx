@@ -9,11 +9,19 @@ import RecommendationsList from "@/components/recommendations-list"
 export default async function BookRecommendationsPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
 
-    const bookData = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/books/${id}`)
-    const book = await bookData.json()
+    const bookData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books/${id}`)
+    const book = bookData.ok ? await bookData.json() : null
 
-    const isInLibraryData = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/is-in-library/${id}`)
-    const isInLibrary = await isInLibraryData.json()
+    let isInLibrary = true;
+    try {
+        const isInLibraryData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/is-in-library/${id}`)
+        if (isInLibraryData.ok) {
+            isInLibrary = await isInLibraryData.json()
+        }
+    } catch (e) {
+        // Fallback para true caso o endpoint não exista (já que estamos navegando na biblioteca)
+        isInLibrary = true;
+    }
 
     if (!book) {
         return (

@@ -4,24 +4,25 @@ import { toast } from "sonner"
 export const addBookToLibrary = async (book: ProcessedBook) => {
 
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/books`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({...book, status: 'to_read' }),
+            body: JSON.stringify({ ...book }),
         })
 
-        if (response.status === 201) {
+        if (response.ok) {
             // Success - book added
-            const data = await response.json()
+            const data = await response.json().catch(() => ({}))
             toast.success(data.message || 'Livro adicionado com sucesso')
 
         } else if (response.status === 409) {
+
             // Book already exists in library
             const data = await response.json()
             toast.warning(data.message || 'Livro já existe na biblioteca')
-            
+
         } else {
             // Other error status codes
             toast.error('Erro ao adicionar livro. Tente novamente mais tarde.')

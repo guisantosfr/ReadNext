@@ -24,7 +24,9 @@ public class GoogleBooksClient {
 
     public GoogleBooksResponseDTO searchBooks(String query) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(googleBooksUrl)
-                .queryParam("q", query);
+                .queryParam("q", query)
+                .queryParam("maxResults", 40)
+                .queryParam("printType", "books");
 
         if (apiKey != null && !apiKey.isBlank()) {
             uriBuilder.queryParam("key", apiKey);

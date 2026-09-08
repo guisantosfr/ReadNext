@@ -11,7 +11,7 @@ import com.guisantosfr.readnext.service.GoogleBooksService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping({"/api/books/external", "/external-books", "/books/external"})
+@RequestMapping("/external-books")
 @RequiredArgsConstructor
 public class GoogleBooksController {
 

@@ -27,14 +27,15 @@ export default function RecommendationsList({
     useEffect(() => {
         async function fetchRecommendations() {
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/recommendations/generate`, {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommendations`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
                         title: bookTitle,
-                        author: bookAuthor
+                        author: bookAuthor,
+                        summary: `${bookTitle} de ${bookAuthor}`
                     }),
                 })
 
@@ -43,16 +44,14 @@ export default function RecommendationsList({
                 }
 
                 const data = await response.json()
-                let parsedRecommendations: Recommendation[] = data.data
-
-                // Parse se necessário (mesmo tratamento do código original)
-                if (typeof parsedRecommendations === "string") {
-                    try {
-                        parsedRecommendations = JSON.parse(parsedRecommendations)
-                    } catch (e) {
-                        parsedRecommendations = []
-                    }
-                }
+                const list = data.recommendations || data.data || (Array.isArray(data) ? data : [])
+                
+                const parsedRecommendations: Recommendation[] = list.map((item: any) => ({
+                    ...item,
+                    description: Array.isArray(item.description)
+                        ? item.description
+                        : [item.summary || item.description || '', item.reason || '']
+                }))
 
                 setRecommendations(parsedRecommendations)
             } catch (err) {
@@ -103,7 +102,7 @@ export default function RecommendationsList({
 
     const saveRecommendation = async (rec: Recommendation) => {
         try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/recommendations`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommendations`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -111,13 +110,13 @@ export default function RecommendationsList({
             body: JSON.stringify({
                 title: rec.title,
                 author: rec.author,
-                description: rec.description[0] + ' ' + rec.description[1],
+                description: Array.isArray(rec.description) ? rec.description.join(' ') : (rec.summary || rec.description || ''),
                 recommendedFrom: bookId
             }),
         })
 
-        if (response.status === 201) {
-            const data = await response.json()
+        if (response.status === 201 || response.ok) {
+            const data = await response.json().catch(() => ({}))
             toast.success(data.message || 'Recomendação salva com sucesso!')
 
         } else {
@@ -144,10 +143,10 @@ export default function RecommendationsList({
                             <div className="space-y-4">
                                 <div>
                                     <div className="text-md text-muted-foreground space-y-2">
-                                        <p>{rec.description[0]}</p>
+                                        <p>{Array.isArray(rec.description) ? rec.description[0] : (rec.summary || rec.description)}</p>
                                         
                                         {/* Segundo parágrafo - só mostra se expandido */}
-                                        {expandedCards.has(index) && (
+                                        {expandedCards.has(index) && Array.isArray(rec.description) && rec.description[1] && (
                                             <p className="animate-in fade-in duration-200">
                                                 {rec.description[1]}
                                             </p>
@@ -155,7 +154,7 @@ export default function RecommendationsList({
                                     </div>
                                     
                                     {/* Botão Ver mais/Ver menos - só mostra se tem segundo parágrafo */}
-                                    {rec.description[1] && (
+                                    {Array.isArray(rec.description) && rec.description[1] && (
                                         <button
                                             onClick={() => toggleExpanded(index)}
                                             className="text-md text-primary hover:text-primary/80 flex items-center gap-1 mt-3 transition-colors"

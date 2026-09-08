@@ -1,3 +1,5 @@
+import { BookStatus } from "./BookStatus";
+
 export interface ProcessedBook {
   id: string;
   title: string;
@@ -6,5 +8,5 @@ export interface ProcessedBook {
   cover: string | null;
   genre: string;
   pages?: number;
-  status?: "to_read" | "reading" | "read" | "dropped";
+  status?: BookStatus;
 }

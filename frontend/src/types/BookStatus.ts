@@ -1,1 +1,1 @@
-export type BookStatus = "to_read" | "reading" | "read" | "dropped"
+export type BookStatus = "TO_READ" | "READING" | "READ" | "DROPPED"

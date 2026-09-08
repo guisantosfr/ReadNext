@@ -9,12 +9,19 @@ import AddToLibraryCard from "@/components/add-to-library-card"
 export default async function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const bookData = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/books/${id}`)
+  const bookData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books/${id}`)
 
-  const book = await bookData.json()
+  const book = bookData.ok ? await bookData.json() : null
 
-  const isInLibraryData = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/is-in-library/${id}`)
-  const isInLibrary = await isInLibraryData.json()
+  let isInLibrary = false;
+  try {
+    const isInLibraryData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/is-in-library/${id}`)
+    if (isInLibraryData.ok) {
+      isInLibrary = await isInLibraryData.json()
+    }
+  } catch (e) {
+    isInLibrary = false;
+  }
 
   if (!book) {
     return (

@@ -6,8 +6,15 @@ import SavedRecommendationsList from "@/components/saved-recommendations-list"
 import ExportButton from '@/components/export-button';
 
 export default async function RecommendationsPage() {
-  const data = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/recommendations`)
-  let recommendations: Recommendation[] = await data.json()
+  let recommendations: Recommendation[] = [];
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommendations`)
+    if (response.ok) {
+      recommendations = await response.json()
+    }
+  } catch (e) {
+    recommendations = [];
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

@@ -11,6 +11,9 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 @Entity
 @Table(name = "books")
 @Getter
@@ -41,7 +44,8 @@ public class Book {
     private Integer pages;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
+    @Column(columnDefinition = "book_status", nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private BookStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)

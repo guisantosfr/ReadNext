@@ -14,7 +14,7 @@ export default function LibraryPage() {
 
   useEffect(() => {
     const getBooks = async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/books`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books`)
 
       const books = await response.json()
 
@@ -55,10 +55,10 @@ export default function LibraryPage() {
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="all">Todos ({books.length})</TabsTrigger>
-          <TabsTrigger value="to_read">Para ler ({getBooksByStatus("to_read").length})</TabsTrigger>
-          <TabsTrigger value="reading">Em andamento ({getBooksByStatus("reading").length})</TabsTrigger>
-          <TabsTrigger value="read">Lidos ({getBooksByStatus("read").length})</TabsTrigger>
-          <TabsTrigger value="dropped">Descartados ({getBooksByStatus("dropped").length})</TabsTrigger>
+          <TabsTrigger value="TO_READ">Para ler ({getBooksByStatus("TO_READ").length})</TabsTrigger>
+          <TabsTrigger value="READING">Em andamento ({getBooksByStatus("READING").length})</TabsTrigger>
+          <TabsTrigger value="READ">Lidos ({getBooksByStatus("READ").length})</TabsTrigger>
+          <TabsTrigger value="DROPPED">Descartados ({getBooksByStatus("DROPPED").length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="all" className="mt-6">
@@ -69,33 +69,33 @@ export default function LibraryPage() {
           />
         </TabsContent>
 
-        <TabsContent value="to_read" className="mt-6">
+        <TabsContent value="TO_READ" className="mt-6">
           <BookGrid
-            books={getBooksByStatus("to_read")}
+            books={getBooksByStatus("TO_READ")}
             onBookUpdate={handleBookUpdate}
             onBookRemove={handleBookRemove}
           />
         </TabsContent>
 
-        <TabsContent value="reading" className="mt-6">
+        <TabsContent value="READING" className="mt-6">
           <BookGrid
-            books={getBooksByStatus("reading")}
+            books={getBooksByStatus("READING")}
             onBookUpdate={handleBookUpdate}
             onBookRemove={handleBookRemove}
           />
         </TabsContent>
 
-        <TabsContent value="read" className="mt-6">
+        <TabsContent value="READ" className="mt-6">
           <BookGrid
-            books={getBooksByStatus("read")}
+            books={getBooksByStatus("READ")}
             onBookUpdate={handleBookUpdate}
             onBookRemove={handleBookRemove}
           />
         </TabsContent>
 
-        <TabsContent value="dropped" className="mt-6">
+        <TabsContent value="DROPPED" className="mt-6">
           <BookGrid
-            books={getBooksByStatus("dropped")}
+            books={getBooksByStatus("DROPPED")}
             onBookUpdate={handleBookUpdate}
             onBookRemove={handleBookRemove}
           />

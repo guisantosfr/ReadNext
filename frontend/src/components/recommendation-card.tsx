@@ -15,7 +15,7 @@ interface RecommendationCardProps {
 export default function RecommendationCard({rec, onBookRemove} : RecommendationCardProps){
     
     const removeBook = async (bookId: string) => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/recommendations/${bookId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommendations/${bookId}`, {
             method: "DELETE",
         })
 
@@ -23,10 +23,8 @@ export default function RecommendationCard({rec, onBookRemove} : RecommendationC
             throw new Error("Failed to remove book")
         }
 
-        if(response.status === 200){
-            toast.success('Recomendação removida com sucesso')
-            onBookRemove?.(bookId)
-        }
+        toast.success('Recomendação removida com sucesso')
+        onBookRemove?.(bookId)
     }
 
     return (
@@ -50,7 +48,7 @@ export default function RecommendationCard({rec, onBookRemove} : RecommendationC
                       <BookOpen className="h-4 w-4 mr-1" />
                       Ver Detalhes
                     </Button>
-                    <Button variant="destructive" size="sm" onClick={() => removeBook(rec.id)} >
+                    <Button variant="destructive" size="sm" onClick={() => removeBook(rec.id || "")} >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>

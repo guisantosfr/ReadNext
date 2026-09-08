@@ -6,7 +6,7 @@ import { FileSpreadsheetIcon } from 'lucide-react'
 export default function ExportButton() {
     const exportData = async () => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/export/excel`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/export/excel`);
             const blob = await response.blob();
 
             // Criar URL temporária para download

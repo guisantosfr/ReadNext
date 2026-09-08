@@ -17,39 +17,28 @@ interface BookGridProps {
 export default function BookGrid({books, onBookUpdate, onBookRemove}: BookGridProps) {
     const getStatusBadge = (status: BookStatus) => {
         const variants = {
-            to_read: { variant: "outline" as const, label: "Para ler" },
-            reading: { variant: "default" as const, label: "Lendo" },
-            read: { variant: "secondary" as const, label: "Lido" },
-            dropped: { variant: "destructive" as const, label: "Descartado" },
+            TO_READ: { variant: "outline" as const, label: "Para ler" },
+            READING: { variant: "default" as const, label: "Lendo" },
+            READ: { variant: "secondary" as const, label: "Lido" },
+            DROPPED: { variant: "destructive" as const, label: "Descartado" },
         }
-        return variants[status as keyof typeof variants] || variants.reading
+        return variants[status] || variants.READING
     }
 
     const updateBookStatus = async (bookId: string, status: BookStatus) => {
-        const body = {
-            id: bookId,
-            status: status,
-        } 
-
-        const response = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/books`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books/${bookId}/status?status=${status}`, {
+            method: "PATCH",
         })
 
         if (!response.ok) {
             throw new Error("Failed to update book status")
         }
 
-        if(response.status === 200){
-            onBookUpdate?.(bookId, status)
-        }
+        onBookUpdate?.(bookId, status)
     }
 
     const removeBook = async (bookId: string) => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT}/books/${bookId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books/${bookId}`, {
             method: "DELETE",
         })
 
@@ -57,10 +46,8 @@ export default function BookGrid({books, onBookUpdate, onBookRemove}: BookGridPr
             throw new Error("Failed to remove book")
         }
 
-        if(response.status === 200){
-            toast.success('Livro removido com sucesso da biblioteca')
-            onBookRemove?.(bookId)
-        }
+        toast.success('Livro removido com sucesso da biblioteca')
+        onBookRemove?.(bookId)
     }
 
     if (books.length === 0) {
@@ -102,10 +89,10 @@ export default function BookGrid({books, onBookUpdate, onBookRemove}: BookGridPr
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="to_read">Para ler</SelectItem>
-                                        <SelectItem value="reading">Em andamento</SelectItem>
-                                        <SelectItem value="read">Lido</SelectItem>
-                                        <SelectItem value="dropped">Descartado</SelectItem>
+                                        <SelectItem value="TO_READ">Para ler</SelectItem>
+                                        <SelectItem value="READING">Em andamento</SelectItem>
+                                        <SelectItem value="READ">Lido</SelectItem>
+                                        <SelectItem value="DROPPED">Descartado</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
