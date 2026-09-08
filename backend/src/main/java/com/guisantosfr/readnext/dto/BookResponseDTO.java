@@ -15,6 +15,7 @@ public record BookResponseDTO(
                 Integer pages,
                 BookStatus status,
                 UUID recommendedFrom,
+                String recommendedFromTitle,
                 OffsetDateTime createdAt,
                 OffsetDateTime updatedAt) {
 }

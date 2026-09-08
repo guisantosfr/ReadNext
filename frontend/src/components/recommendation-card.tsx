@@ -15,7 +15,7 @@ interface RecommendationCardProps {
 export default function RecommendationCard({rec, onBookRemove} : RecommendationCardProps){
     
     const removeBook = async (bookId: string) => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommendations/${bookId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books/${bookId}`, {
             method: "DELETE",
         })
 

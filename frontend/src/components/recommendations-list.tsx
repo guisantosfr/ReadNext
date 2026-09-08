@@ -102,33 +102,32 @@ export default function RecommendationsList({
 
     const saveRecommendation = async (rec: Recommendation) => {
         try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommendations`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                title: rec.title,
-                author: rec.author,
-                description: Array.isArray(rec.description) ? rec.description.join(' ') : (rec.summary || rec.description || ''),
-                recommendedFrom: bookId
-            }),
-        })
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: rec.title,
+                    author: rec.author,
+                    description: Array.isArray(rec.description) ? rec.description.join(' ') : (rec.summary || rec.description || ''),
+                    genre: rec.genre || 'Sem categoria',
+                    status: 'TO_READ',
+                    recommendedFromId: bookId
+                }),
+            })
 
-        if (response.status === 201 || response.ok) {
-            const data = await response.json().catch(() => ({}))
-            toast.success(data.message || 'Recomendação salva com sucesso!')
-
-        } else {
+            if (response.ok) {
+                const data = await response.json().catch(() => ({}))
+                toast.success(data.message || 'Recomendação salva com sucesso!')
+            } else {
+                toast.error('Erro ao adicionar recomendação. Tente novamente mais tarde.')
+                throw new Error('Erro ao adicionar recomendação')
+            }
+        } catch (error: any) {
+            console.error('Erro ao adicionar recomendação:', error.message)
             toast.error('Erro ao adicionar recomendação. Tente novamente mais tarde.')
-            throw new Error('Erro ao adicionar recomendação')
         }
-
-    } catch (error: any) {
-        console.error('Erro ao adicionar recomendação:', error.message)
-        toast.error('Erro ao adicionar recomendação. Tente novamente mais tarde.')
-    }
-
     }
 
     return (

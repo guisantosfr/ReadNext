@@ -17,4 +17,7 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
     List<Book> findAllRecommendations();
 
     List<Book> findByRecommendedFrom(UUID bookId);
+
+    @Query("SELECT b FROM Book b LEFT JOIN FETCH b.recommendedFrom WHERE b.recommendedFrom IS NOT NULL")
+    List<Book> findByRecommendedFromNotNull();
 }

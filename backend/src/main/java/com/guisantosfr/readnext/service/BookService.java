@@ -87,11 +87,31 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public boolean isInLibrary(String idStr) {
+        if (idStr == null || idStr.isBlank()) {
+            return false;
+        }
+        try {
+            UUID id = UUID.fromString(idStr);
+            return bookRepository.existsById(id);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<BookResponseDTO> findRecommendations() {
+        return bookRepository.findByRecommendedFromNotNull().stream().map(this::toResponse).toList();
+    }
+
     private BookResponseDTO toResponse(Book book) {
         return new BookResponseDTO(book.getId(), book.getTitle(), book.getAuthor(), book.getDescription(),
                 book.getCover(),
                 book.getGenre(), book.getPages(), book.getStatus(),
-                book.getRecommendedFrom() != null ? book.getRecommendedFrom().getId() : null, book.getCreatedAt(),
+                book.getRecommendedFrom() != null ? book.getRecommendedFrom().getId() : null,
+                book.getRecommendedFrom() != null ? book.getRecommendedFrom().getTitle() : null,
+                book.getCreatedAt(),
                 book.getUpdatedAt());
     }
 
