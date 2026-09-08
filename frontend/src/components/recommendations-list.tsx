@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { Recommendation } from "@/types/Recommendation"
 import { Loader2 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
@@ -23,8 +23,15 @@ export default function RecommendationsList({
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set())
+    const fetchedKeyRef = useRef<string>("")
 
     useEffect(() => {
+        const key = `${bookTitle}-${bookAuthor}`
+        if (fetchedKeyRef.current === key) {
+            return
+        }
+        fetchedKeyRef.current = key
+
         async function fetchRecommendations() {
             try {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommendations`, {

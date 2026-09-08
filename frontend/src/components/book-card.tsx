@@ -12,7 +12,7 @@ export default function BookCard(book: ProcessedBook) {
     return (
         <Card key={book.id} className="hover:shadow-lg transition-shadow">
             <CardHeader className="pb-2">
-                <div className="aspect-[3/4] mb-4 overflow-hidden rounded-md bg-gray-100">
+                <div className="aspect-[4/5] mb-4 overflow-hidden rounded-md bg-gray-100">
                     {
                         book.cover ?
                             <img
