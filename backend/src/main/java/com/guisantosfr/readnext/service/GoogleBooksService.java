@@ -22,7 +22,7 @@ public class GoogleBooksService {
             return new GoogleBooksResponseDTO(null, 0, Collections.emptyList());
         }
 
-        String formattedQuery = query.toLowerCase().startsWith("intitle:") ? query : "intitle:" + query.trim();
+        String formattedQuery = query.trim();
         return googleBooksClient.searchBooks(formattedQuery);
     }
 
@@ -32,7 +32,8 @@ public class GoogleBooksService {
             return new GoogleBooksResponseDTO(null, 0, Collections.emptyList());
         }
 
-        String formattedQuery = authorName.toLowerCase().startsWith("inauthor:") ? authorName : "inauthor:" + authorName.trim();
+        String formattedQuery = authorName.toLowerCase().startsWith("inauthor:") ? authorName
+                : "inauthor:" + authorName.trim();
         return googleBooksClient.searchBooks(formattedQuery);
     }
 }
