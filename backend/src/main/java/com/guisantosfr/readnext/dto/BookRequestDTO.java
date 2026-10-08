@@ -5,23 +5,22 @@ import java.util.UUID;
 import com.guisantosfr.readnext.model.BookStatus;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public record BookRequestDTO(
-        @NotBlank(message = "O título é obrigatório.") String title,
+                @NotBlank(message = "O título é obrigatório.") String title,
 
-        @NotBlank(message = "O autor é obrigatório.") String author,
+                @NotBlank(message = "O autor é obrigatório.") String author,
 
-        String description,
+                String description,
 
-        String cover,
+                String cover,
 
-        String genre,
+                String genre,
 
-        @Positive(message = "O número de páginas deve ser maior que zero.") Integer pages,
+                @PositiveOrZero(message = "O número de páginas deve ser maior ou igual a zero.") Integer pages,
 
-        BookStatus status,
+                BookStatus status,
 
-        UUID recommendedFromId) {
+                UUID recommendedFromId) {
 }
