@@ -21,12 +21,11 @@ public class RecommendationService {
                 Com base no seguinte livro fornecido pelo usuário:
                 - Título: %s
                 - Autor: %s
-                - Resumo: %s
 
                 Gere uma lista de recomendações de livros semelhantes que o leitor possa gostar.
                 Para cada recomendação, forneça o título (title), autor (author), um breve resumo (summary), gênero (genre) e o motivo da recomendação (reason).
                 """
-                .formatted(request.title(), request.author(), request.summary());
+                .formatted(request.title(), request.author());
 
         return chatClient.prompt()
                 .user(userPrompt)

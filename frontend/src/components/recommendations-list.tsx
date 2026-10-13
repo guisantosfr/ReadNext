@@ -14,10 +14,10 @@ interface RecommendationsContainerProps {
     bookAuthor: string
 }
 
-export default function RecommendationsList({ 
+export default function RecommendationsList({
     bookId,
-    bookTitle, 
-    bookAuthor 
+    bookTitle,
+    bookAuthor
 }: RecommendationsContainerProps) {
     const [recommendations, setRecommendations] = useState<Recommendation[]>([])
     const [loading, setLoading] = useState(true)
@@ -41,8 +41,7 @@ export default function RecommendationsList({
                     },
                     body: JSON.stringify({
                         title: bookTitle,
-                        author: bookAuthor,
-                        summary: `${bookTitle} de ${bookAuthor}`
+                        author: bookAuthor
                     }),
                 })
 
@@ -52,7 +51,7 @@ export default function RecommendationsList({
 
                 const data = await response.json()
                 const list = data.recommendations || data.data || (Array.isArray(data) ? data : [])
-                
+
                 const parsedRecommendations: Recommendation[] = list.map((item: any) => ({
                     ...item,
                     description: Array.isArray(item.description)
@@ -97,8 +96,8 @@ export default function RecommendationsList({
             <div className="text-center py-12">
                 <p className="text-destructive mb-4">Erro ao carregar recomendações</p>
                 <p className="text-muted-foreground text-sm">{error}</p>
-                <button 
-                    onClick={() => window.location.reload()} 
+                <button
+                    onClick={() => window.location.reload()}
                     className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
                 >
                     Tentar novamente
@@ -139,58 +138,58 @@ export default function RecommendationsList({
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {recommendations.map((rec, index) => (
-                    <Card key={index} className="hover:shadow-lg transition-shadow">
-                        <CardHeader>
-                            <CardTitle className="text-xl line-clamp-2">{rec.title}</CardTitle>
-                            <CardDescription className="text-base">{rec.author}</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-4">
-                                <div>
-                                    <div className="text-md text-muted-foreground space-y-2">
-                                        <p>{Array.isArray(rec.description) ? rec.description[0] : (rec.summary || rec.description)}</p>
-                                        
-                                        {/* Segundo parágrafo - só mostra se expandido */}
-                                        {expandedCards.has(index) && Array.isArray(rec.description) && rec.description[1] && (
-                                            <p className="animate-in fade-in duration-200">
-                                                {rec.description[1]}
-                                            </p>
-                                        )}
-                                    </div>
-                                    
-                                    {/* Botão Ver mais/Ver menos - só mostra se tem segundo parágrafo */}
-                                    {Array.isArray(rec.description) && rec.description[1] && (
-                                        <button
-                                            onClick={() => toggleExpanded(index)}
-                                            className="text-md text-primary hover:text-primary/80 flex items-center gap-1 mt-3 transition-colors"
-                                        >
-                                            {expandedCards.has(index) ? (
-                                                <>
-                                                    Ver menos
-                                                    <ChevronUp className="h-4 w-4" />
-                                                </>
-                                            ) : (
-                                                <>
-                                                    Ver mais
-                                                    <ChevronDown className="h-4 w-4" />
-                                                </>
-                                            )}
-                                        </button>
+            {recommendations.map((rec, index) => (
+                <Card key={index} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                        <CardTitle className="text-xl line-clamp-2">{rec.title}</CardTitle>
+                        <CardDescription className="text-base">{rec.author}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-4">
+                            <div>
+                                <div className="text-md text-muted-foreground space-y-2">
+                                    <p>{Array.isArray(rec.description) ? rec.description[0] : (rec.summary || rec.description)}</p>
+
+                                    {/* Segundo parágrafo - só mostra se expandido */}
+                                    {expandedCards.has(index) && Array.isArray(rec.description) && rec.description[1] && (
+                                        <p className="animate-in fade-in duration-200">
+                                            {rec.description[1]}
+                                        </p>
                                     )}
                                 </div>
 
-                                <div className="flex justify-end pt-2">
-                                    <Button size="sm" variant="outline" onClick={() => saveRecommendation(rec)}>
-                                        <Heart className="h-4 w-4 mr-2" />
-                                        Salvar Recomendação
-                                    </Button>
-                                </div>
+                                {/* Botão Ver mais/Ver menos - só mostra se tem segundo parágrafo */}
+                                {Array.isArray(rec.description) && rec.description[1] && (
+                                    <button
+                                        onClick={() => toggleExpanded(index)}
+                                        className="text-md text-primary hover:text-primary/80 flex items-center gap-1 mt-3 transition-colors"
+                                    >
+                                        {expandedCards.has(index) ? (
+                                            <>
+                                                Ver menos
+                                                <ChevronUp className="h-4 w-4" />
+                                            </>
+                                        ) : (
+                                            <>
+                                                Ver mais
+                                                <ChevronDown className="h-4 w-4" />
+                                            </>
+                                        )}
+                                    </button>
+                                )}
                             </div>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div>
+
+                            <div className="flex justify-end pt-2">
+                                <Button size="sm" variant="outline" onClick={() => saveRecommendation(rec)}>
+                                    <Heart className="h-4 w-4 mr-2" />
+                                    Salvar Recomendação
+                                </Button>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            ))}
+        </div>
 
     )
 }
