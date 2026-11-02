@@ -49,7 +49,7 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public List<BookResponseDTO> findAll() {
-        return bookRepository.findAll().stream().map(this::toResponse).toList();
+        return bookRepository.findByRecommendedFromIsNull().stream().map(this::toResponse).toList();
     }
 
     @Transactional(readOnly = true)

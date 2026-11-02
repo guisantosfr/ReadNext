@@ -20,4 +20,6 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
 
     @Query("SELECT b FROM Book b LEFT JOIN FETCH b.recommendedFrom WHERE b.recommendedFrom IS NOT NULL")
     List<Book> findByRecommendedFromNotNull();
+
+    List<Book> findByRecommendedFromIsNull();
 }
