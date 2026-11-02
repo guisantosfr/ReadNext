@@ -1,4 +1,6 @@
-import { ArrowLeft, Heart, BookOpen } from "lucide-react"
+export const dynamic = "force-dynamic";
+
+import { ArrowLeft, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Recommendation } from "@/types/Recommendation"
@@ -8,7 +10,9 @@ import ExportButton from '@/components/export-button';
 export default async function RecommendationsPage() {
   let recommendations: Recommendation[] = [];
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommendations`)
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommendations`, {
+      cache: "no-store"
+    })
     if (response.ok) {
       recommendations = await response.json()
     }
